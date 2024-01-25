@@ -116,7 +116,7 @@ func (app *App) deleteProduct(w http.ResponseWriter, r *http.Request) {
 	sendResponse(w, http.StatusOK, map[string]string{"result": "successful deletion"})
 }
 
-func (app *App) Initialize() error {
+func (app *App) Initialize(DbUser, DbPassword, DbName string) error {
 	connectionString := fmt.Sprintf("%v:%v@tcp(127.0.0.1:3306)/%v", DbUser, DbPassword, DbName)
 	var err error
 	app.DB, err = sql.Open("mysql", connectionString)
@@ -148,7 +148,7 @@ func (app *App) handleRequest() {
 
 func main() {
 	app := App{}
-	app.Initialize()
+	app.Initialize(DbUser, DbPassword, DbName)
 	app.handleRequest()
 	log.Fatal(http.ListenAndServe("address", app.Router))
 }
